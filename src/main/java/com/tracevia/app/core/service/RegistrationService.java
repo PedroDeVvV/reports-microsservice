@@ -22,7 +22,7 @@ public class RegistrationService {
         if (user != null) {
             throw new RegistrationException("Este login já existe");
         }
-        
+
         repository.save(data);
 
         return data;

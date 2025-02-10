@@ -41,6 +41,7 @@ public class ReportRepository {
 
             // Generates the dynamic query
             String query = QueryBuilder.buildQuery(request);
+            System.out.println("Aqui: " + query);
             Query nativeQuery = entityManager.createNativeQuery(query);
 
             // Define the query parameters from the filters
