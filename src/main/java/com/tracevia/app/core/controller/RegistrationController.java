@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -36,14 +37,14 @@ public class RegistrationController {
     @PostMapping
     public ResponseEntity register(@RequestBody @Valid RegistrationData data, UriComponentsBuilder uriBuilder) throws RegistrationException {
 
-        var pass = config.passwordEncoder().encode(data.password());
+        String pass = config.passwordEncoder().encode(data.password());
         LocalDateTime now = LocalDateTime.now();
 
-        var user = new User(null, data.login(), pass, now);
+        User user = new User(null, data.login(), pass, now);
 
-        var userService = service.registerUser(user);
+        User userService = service.registerUser(user);
 
-        var uri = uriBuilder.path("/registration/{login}").buildAndExpand(user.getId()).toUri();
+        URI uri = uriBuilder.path("/registration/{login}").buildAndExpand(user.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new DetailsDataUser(userService.getUsername()));
     }

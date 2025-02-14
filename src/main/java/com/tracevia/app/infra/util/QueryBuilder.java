@@ -64,12 +64,17 @@ public class QueryBuilder {
                         dateCondition.append(" ").append(filter.getOperator()).append(" :").append(filter.getKey());
                         conditions.add(String.valueOf(dateCondition)); // Add the complete condition
                         dateCondition = new StringBuilder(); // Clear StringBuilder
-                    } else {
+                    } else if(filter.getOperator().equals("IN")) {
+//                        System.out.println("VALUE: " + filter.getValue());
+                        conditions.add(filter.getColumn() + " " + filter.getOperator() + "(:" + filter.getKey() + ")");
+                    }
+                    else {
                         // Add other filters as normal
                         conditions.add(filter.getColumn() + " " + filter.getOperator() + " :" + filter.getKey());
                     }
                 }
-
+                System.out.println("query " + query);
+                System.out.println("conditions " + conditions);
                 query.append(String.join(" AND ", conditions));
             }
 

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class ReportRepository {
      *
      * @param request The report request containing query parameters and filters.
      * @return A list of maps containing the query result, with column names as keys and their corresponding values.
-     *         Returns an empty list if no results are found or if no columns are provided.
+     * Returns an empty list if no results are found or if no columns are provided.
      * @throws RuntimeException if an error occurs while executing the query.
      */
     public List<Map<String, Object>> executeDynamicQuery(ReportRequest request) {
@@ -41,14 +42,29 @@ public class ReportRepository {
 
             // Generates the dynamic query
             String query = QueryBuilder.buildQuery(request);
-            System.out.println("Aqui: " + query);
             Query nativeQuery = entityManager.createNativeQuery(query);
 
             // Define the query parameters from the filters
             if (request.getFilters() != null) {
                 for (FilterRequest filter : request.getFilters()) {
                     if (filter.getKey() != null && filter.getValue() != null) {
-                        nativeQuery.setParameter(filter.getKey(), filter.getValue());
+                        if (filter.getKey().equals("multiequipment")) {
+                            String values = filter.getValue();
+                            String[] valuesArray = values.replace("\ss", " ").split(",");
+                            int[] sats = Arrays.stream(valuesArray).mapToInt(Integer::parseInt).toArray();
+
+                            nativeQuery.setParameter(filter.getKey(), Arrays.asList(
+                                   sats[0],
+                                    (sats.length > 1) ? sats[1] : 0,
+                                    (sats.length > 2) ? sats[2] : 0,
+                                    (sats.length > 3) ? sats[3] : 0,
+                                    (sats.length > 4) ? sats[4] : 0,
+                                    (sats.length > 5) ? sats[5] : 0,
+                                    (sats.length > 6) ? sats[6] : 0
+                                    ));
+                        } else {
+                            nativeQuery.setParameter(filter.getKey(), filter.getValue());
+                        }
                     }
                 }
             }
