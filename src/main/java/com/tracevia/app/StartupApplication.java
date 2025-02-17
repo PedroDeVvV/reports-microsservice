@@ -1,5 +1,6 @@
 package com.tracevia.app;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,6 +17,9 @@ public class StartupApplication {
 	 * @param args Command-line arguments passed during application startup.
 	 */
 	public static void main(String[] args) {
+
+
+
 		SpringApplication.run(StartupApplication.class, args);
 	}
 
