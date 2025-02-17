@@ -24,11 +24,12 @@ public class SecurityConfigurations {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("calling securityFilterChain");
         return http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers("/v3/api/**", "swagger-ui.html", "/swagger-ui/**", "/registration", "api/reports/generate").permitAll()
+                        .requestMatchers("/v3/api/**", "swagger-ui.html", "/swagger-ui/**", "/registration", "api/reports/generate/**", "api/reports/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

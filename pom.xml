@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.tracevia</groupId>
     <artifactId>report-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>report-service</name>
     <description>The report project microservice</description>
     <url/>
